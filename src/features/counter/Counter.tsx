@@ -1,23 +1,17 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react'
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
-} from './counterSlice';
-import styles from './Counter.module.css';
+import {useAppDispatch, useAppSelector} from '../../app/hooks'
+import {decrement, increment, incrementAsync, incrementByAmount, incrementIfOdd, selectCount} from './counterSlice'
+
+import styles from './Counter.module.css'
+import {startStreaming, stopStreaming} from "../stream/streamSlice"
 
 export function Counter() {
-  const count = useAppSelector(selectCount);
-  const dispatch = useAppDispatch();
-  const [incrementAmount, setIncrementAmount] = useState('2');
+  const count = useAppSelector(selectCount)
+  const dispatch = useAppDispatch()
+  const [incrementAmount, setIncrementAmount] = useState('2')
 
-  const incrementValue = Number(incrementAmount) || 0;
-
+  const incrementValue = Number(incrementAmount) || 0
   return (
     <div>
       <div className={styles.row}>
@@ -62,7 +56,20 @@ export function Counter() {
         >
           Add If Odd
         </button>
+        <button
+          className={styles.button}
+          onClick={() => dispatch(startStreaming())}
+        >
+          start stream
+        </button>
+        <button
+          className={styles.button}
+          onClick={() => dispatch(stopStreaming())}
+        >
+          stop stream
+        </button>
+
       </div>
     </div>
-  );
+  )
 }
