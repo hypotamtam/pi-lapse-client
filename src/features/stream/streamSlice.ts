@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
 import {StreamConfig} from "./streamConfig"
-import {startStreamingAPI, stopStreamingAPI} from "./streamingAPI"
+import {getConfigAPI, startStreamingAPI, stopStreamingAPI, updateConfigAPI} from "./streamingAPI"
 
 export interface StreamState {
   url?: string
@@ -11,21 +11,31 @@ export interface StreamState {
 const initialState: StreamState = {
   url: undefined,
   status: "stop",
-  config: {
-    exposure: "sport",
-    timelapse: "100",
-  },
+  config: {},
 }
 
-export const startStreaming = createAsyncThunk(
-  "stream/start",
-  async () => await startStreamingAPI(),
+export const startStreaming = createAsyncThunk("stream/start", async () => await startStreamingAPI(),)
+
+export const stopStreaming = createAsyncThunk("stream/stop", async () => await stopStreamingAPI(),)
+
+let timeout: ReturnType<typeof setTimeout> | null
+export const updateStreamConfig = createAsyncThunk(
+  "stream/updateConfig",
+  async (config: StreamConfig) =>  {
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+    return await new Promise<StreamConfig>(resolve => {
+      timeout = setTimeout(async () => {
+        await updateConfigAPI(config)
+        timeout = null
+        resolve(config)
+      }, 2000)
+    })
+  },
 )
 
-export const stopStreaming = createAsyncThunk(
-  "stream/stop",
-  async () => await stopStreamingAPI(),
-)
+export const getStreamConfig = createAsyncThunk("stream/getConfig", async () =>  await getConfigAPI())
 
 export const streamSlice = createSlice({
   name: "stream",
@@ -45,6 +55,14 @@ export const streamSlice = createSlice({
         state.url = undefined
         state.status = "stop"
       })
+      .addCase(updateStreamConfig.rejected, state => {
+        state.status = "stop"
+      })
+      .addCase(updateStreamConfig.fulfilled, (state, action) => {
+        state.status = "live"
+        state.config = action.payload
+      })
+      .addCase(getStreamConfig.fulfilled, (state, action) => { state.config = action.payload })
   },
 })
 

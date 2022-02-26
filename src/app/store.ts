@@ -1,12 +1,13 @@
 import {Action, configureStore, ThunkAction} from '@reduxjs/toolkit'
 import counterReducer from '../features/counter/counterSlice'
 import streamReducer from '../features/stream/streamSlice'
-
+import timelapseReducer from '../features/timelapse/timelapseSlice'
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     stream: streamReducer,
+    timelapse: timelapseReducer,
   },
 })
 

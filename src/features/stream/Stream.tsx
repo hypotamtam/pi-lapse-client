@@ -1,25 +1,15 @@
-import {CSSProperties} from "react"
 import {useAppSelector} from "../../app/hooks"
-
+import Image from 'react-bootstrap/Image'
 
 export function Stream() {
-  const style: CSSProperties = {
-    margin: "auto",
-    backgroundColor: "hsl(0, 0%, 25%)",
-    maxWidth: "100%",
-    maxHeight: "100%"
-  }
-
   const streamState = useAppSelector(state => state.stream)
   switch (streamState.status) {
     case "live":
       if (streamState.url !== undefined) {
-        return (<img id="streamImg" style={style} alt="Video stream" src={streamState.url}/>)
+        return (<Image rounded alt="Video stream" src={streamState.url} style={{ maxWidth:"100%", height: "auto"}}/>)
       }
-      return (<span>Stream url undefined</span>)
+      return (<span className="text-center">Stream url undefined</span>)
     case "stop":
-      return (<span>Stream finished</span>)
-
+      return (<span className="text-center">Stream finished</span>)
   }
-
 }
