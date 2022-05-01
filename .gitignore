@@ -247,3 +247,4 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/webstorm,react,node
+pi-lapse-client.code-workspace

@@ -68,7 +68,7 @@ export function Timelapse() {
           </DropdownButton>
         </InputGroup>
         <InputGroup className="mb-2">
-          <InputGroup.Text>Duration</InputGroup.Text>
+          <InputGroup.Text>Name</InputGroup.Text>
           <FormControl type="text" value={name} onChange={element => setName(element.target.value)}/>
         </InputGroup>
         <Button onClick={() => {
